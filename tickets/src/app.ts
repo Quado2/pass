@@ -6,6 +6,7 @@ import { errorHandler, NotFoundError, currentUser } from '@qdtickets/common';
 import { createTicketRouter } from './routes/new';
 import { showTicketRouter } from './routes/show';
 import { indexRouter } from './routes';
+import { UpdateRouter } from './routes/update';
 
 
 
@@ -23,6 +24,7 @@ app.use(currentUser);
 app.use(createTicketRouter)
 app.use(showTicketRouter)
 app.use(indexRouter)
+app.use(UpdateRouter);
 
 
 
