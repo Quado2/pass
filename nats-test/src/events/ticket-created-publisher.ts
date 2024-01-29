@@ -1,6 +1,4 @@
-import { BasePublisher } from "./base-publisher";
-import { Subjects } from "./subjects";
-import { TicketCreatedEvent } from "./ticket-created-event";
+import { TicketCreatedEvent, Subjects, BasePublisher } from "@qdtickets/common";
 
 export class TicketCreatedPublisher extends BasePublisher<TicketCreatedEvent> {
   readonly subject = Subjects.TicketCreated;
