@@ -16,6 +16,8 @@ spec:
         - name: client
           # image: quado2/client
           image: us.gcr.io/ticketing-dev-407610/client
+          ports:
+            - containerPort: 3000
 ---
 apiVersion: v1
 kind: Service
