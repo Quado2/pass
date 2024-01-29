@@ -1,7 +1,5 @@
-import { BaseListener } from "./base-listener";
+import { BaseListener , TicketCreatedEvent, Subjects} from "@qdtickets/common";
 import { Message } from "node-nats-streaming";
-import { TicketCreatedEvent } from "./ticket-created-event";
-import { Subjects } from "./subjects";
 
 
 export class TicketCreatedListener extends BaseListener<TicketCreatedEvent> {
@@ -11,7 +9,11 @@ export class TicketCreatedListener extends BaseListener<TicketCreatedEvent> {
     console.log(`Message received: #${msg.getSequence()}- ${msg.getSubject()} width data:
     Id: ${data.id}
     Title: ${data.title}
-    Price: ${data.price}`)
+    Price: ${data.price}
+    UserId: ${data.userId}
+    
+    `)
+    
 
     msg.ack()
   }

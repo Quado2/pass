@@ -17,7 +17,8 @@ stan.on('connect', async () => {
     await publisher.publish({
       title: "Psquare Reunion",
       id: '123',
-      price: 10
+      price: 10,
+      userId: '112adf2'
     })
   }
   catch (e) {
