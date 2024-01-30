@@ -3,6 +3,8 @@ import express, {Request, Response} from 'express'
 import {body} from 'express-validator'
 import { getTicketValidations } from '../utils/validations';
 import { Ticket } from '../models/tickets';
+import { TicketUpdatedPublisher } from '../events/publishers/ticket-updated';
+import natsClient from '../nats-client';
 
 
 const router = express.Router();
@@ -35,6 +37,13 @@ router.patch('/api/tickets/:id',
   })
 
   await ticket.save();
+
+  new TicketUpdatedPublisher(natsClient.client).publish({
+    id: ticket.id,
+    userId: ticket.userId,
+    title: ticket.title,
+    price: ticket.price
+  })
 
  res.send(ticket)
 

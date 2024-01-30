@@ -2,6 +2,8 @@ import express, {Request, Response} from 'express';
 import { body } from 'express-validator';
 import { requireAuth, validateRequest } from '@qdtickets/common';
 import { Ticket } from '../models/tickets';
+import { TicketCreatedPublisher } from '../events/publishers/ticket-created';
+import natsClient from '../nats-client';
 
 const router = express.Router();
 
@@ -27,6 +29,13 @@ async (req:Request, res:Response) => {
   })
 
   await ticket.save();
+
+  new TicketCreatedPublisher(natsClient.client).publish({
+    id: ticket.id,
+    userId: ticket.userId,
+    title: ticket.title,
+    price: ticket.price
+  })
   res.status(201).send(ticket);
 })
 

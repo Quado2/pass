@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import natsClient from './nats-client';
 
 import { app } from './app';
 
@@ -12,8 +13,15 @@ const start = async () => {
   }
 
   try {
-    await mongoose.connect(process.env.MONGO_URI);
+    await natsClient.connect('ticketing', 'adfkj', 'http://nats-srv:4222')
+    natsClient.client.on('close', () => {
+      console.log("Shutting down NAT");
+      process.exit();
+    })
+    process.on('SIGINT', () => natsClient.client.close());
+    process.on('SIGTERM', () => natsClient.client.close());
 
+    await mongoose.connect(process.env.MONGO_URI);
     console.log('Connected to MongoDb');
   } catch (err) {
     console.error(err);
