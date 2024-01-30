@@ -2,6 +2,7 @@ import request from 'supertest'
 import {app} from '../../app';
 import mongoose from 'mongoose';
 import { Ticket } from '../../models/tickets';
+import natsClient from '../../nats-client';
 
 it('returns a 404 if the provided id does not exist', async () => {
   const id = new mongoose.Types.ObjectId().toHexString();
@@ -84,4 +85,27 @@ it('updates the ticket if the user provides a valid title and or price ', async 
   const ticket = await Ticket.findById(response.body.id);
   console.log({ticket})
   expect(ticket!.title).toBe(updateTitle)
+})
+
+it('publishes event after ticket is updated', async () => {
+  const cookie = global.signin();
+  const response = await request(app)
+  .post('/api/tickets')
+  .set("Cookie", cookie)
+  .send({
+    title: 'adfk',
+    price: 20
+  })
+
+  const updateTitle = "Good title"
+  await request(app)
+    .patch(`/api/tickets/${response.body.id}`)
+    .set('Cookie', cookie)
+    .send({
+      title:updateTitle,
+      price: 22
+    })
+    .expect(200)
+
+  expect(natsClient.client.publish).toHaveBeenCalled();
 })

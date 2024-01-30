@@ -1,7 +1,7 @@
 export default {
   client: {
-    publish: (topic: string, data: string, callback: () => void)  => {
-      callback();
-    }
+    publish: jest.fn().mockImplementation((subject: string, data: string, callback: () => void)  => {
+      callback(); 
+    })
   }
 }
