@@ -4,9 +4,9 @@ metadata:
   name: ticketing
 build:
   googleCloudBuild:
-    projectId: ticketing-dev-407610
+    projectId: ticketing-dev-417023
   artifacts:
-    - image: us.gcr.io/ticketing-dev-407610/auth
+    - image: us.gcr.io/ticketing-dev-417023/auth
     # - image: quado2/auth
       context: auth
       docker:
@@ -16,7 +16,7 @@ build:
           - src: "src/***/*.ts"
             dest: .
     # - image: quado2/client
-    - image: us.gcr.io/ticketing-dev-407610/client
+    - image: us.gcr.io/ticketing-dev-417023/client
       context: client
       docker:
         dockerfile: Dockerfile
@@ -24,8 +24,17 @@ build:
         manual:
           - src: "***/*.js"
             dest: .
-    - image: us.gcr.io/ticketing-dev-407610/tickets
+    - image: us.gcr.io/ticketing-dev-417023/tickets
     # - image: quado2/tickets
+      context: tickets
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/***/*.ts"
+            dest: .
+    - image: us.gcr.io/ticketing-dev-417023/orders
+    # - image: quado2/orders
       context: tickets
       docker:
         dockerfile: Dockerfile
@@ -42,3 +51,5 @@ manifests:
     - infra/k8s/tickets-mongo-depl.yaml
     - infra/k8s/tickets-depl.yaml
     - infra/k8s/nats-depl.yaml
+    - infra/k8s/orders-mongo-depl.yaml
+    - infra/k8s/orders-depl.yaml

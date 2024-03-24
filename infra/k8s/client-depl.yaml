@@ -15,7 +15,7 @@ spec:
       containers:
         - name: client
           # image: quado2/client
-          image: us.gcr.io/ticketing-dev-407610/client
+          image: us.gcr.io/ticketing-dev-417023/client
           ports:
             - containerPort: 3000
 ---
