@@ -2,17 +2,19 @@ import mongoose from "mongoose";
 import { OrderStatus } from "@qdtickets/common";
 import { TicketDoc } from "./ticket";
 
+export {OrderStatus}
+
 interface OrderAttrs {
   userId: string;
   status: OrderStatus;
-  expiresAt: string;
+  expiresAt: Date;
   ticket: TicketDoc;
 }
 
 interface OrderDoc extends mongoose.Document {
   userId: string;
   status: OrderStatus;
-  expiresAt: string;
+  expiresAt: Date;
   ticket: TicketDoc;
 }
 
@@ -22,15 +24,15 @@ interface OrderModel extends mongoose.Model<OrderDoc> {
 
 
 const orderSchema = new mongoose.Schema({
-  useId: {
+  userId: {
+    type: String,
+    required: true, 
+  },
+  status: {
     type: String,
     required: true,
     enum: Object.values(OrderStatus),
     default: OrderStatus.Created
-  },
-  status: {
-    type: String,
-    required: true
   },
   expiresAt: {
     type: mongoose.Schema.Types.Date

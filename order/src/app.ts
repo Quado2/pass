@@ -5,7 +5,7 @@ import cookieSession from 'cookie-session';
 import { errorHandler, NotFoundError, currentUser } from '@qdtickets/common';
 import { indexOrderRouter } from './routes';
 import { newOrderRouter } from './routes/new';
-import { deleteOrderRouter } from './routes/delete';
+import { cancelOrderRouter } from './routes/cancel';
 import { showOrderRouter } from './routes/show';
 
 
@@ -22,7 +22,7 @@ app.use(currentUser);
 
 app.use(indexOrderRouter);
 app.use(newOrderRouter);
-app.use(deleteOrderRouter);
+app.use(cancelOrderRouter);
 app.use(showOrderRouter);
 
 
