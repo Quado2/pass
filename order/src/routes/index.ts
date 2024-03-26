@@ -7,4 +7,4 @@ router.get('/api/orders', async (req:Request, res: Response) => {
 });
 
 
-export {router as orderIndexRouter}
+export {router as indexOrderRouter}
