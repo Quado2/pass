@@ -3,6 +3,7 @@ import {app} from '../../app';
 import mongoose  from 'mongoose';
 import { Ticket } from '../../models/ticket';
 import { Order, OrderStatus } from '../../models/order';
+import natsClient from '../../nats-client';
 
 it('returns an error if the ticket does not exit', async () => {
   const ticketId = new mongoose.Types.ObjectId();
@@ -53,4 +54,18 @@ it('reserves a ticket', async () => {
     .expect(201)
 })
 
-it.todo("Publishes event on creating order")
+it("Publishes event on creating order", async () => {
+  const ticket = Ticket.build({
+    title: "PSquare Sell out",
+    price: 40
+  })
+  await ticket.save();
+
+  await request(app)
+    .post("/api/orders")
+    .set("Cookie", global.signin())
+    .send({ticketId: ticket.id})
+    .expect(201)
+
+  expect(natsClient.client.publish).toHaveBeenCalled();
+})

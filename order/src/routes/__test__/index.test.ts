@@ -54,7 +54,4 @@ it("Fetches orders for a particular user", async ()=> {
     expect(user2Orders[1].id).toEqual(orderTwo.id);
     expect(user2Orders[0].ticket.id).toEqual(ticket2.id)
   
-  
-
-
 })

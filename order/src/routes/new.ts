@@ -3,6 +3,8 @@ import {BadRequestError, NotFoundError, OrderStatus, requireAuth, validateReques
 import { body } from 'express-validator'
 import { Ticket } from '../models/ticket';
 import { Order } from '../models/order';
+import { OrderCreatedPublisher } from '../events/publishers/order-created';
+import natsClient from '../nats-client';
 
 const EXPIRATION_WINDOW_SECONDS = 60*15;
 
@@ -46,6 +48,17 @@ validateRequest,
   await order.save();
 
   //Publish an event saying that an order was created
+  new OrderCreatedPublisher(natsClient.client).publish({
+      id: order.id,
+      status: order.status,
+      userId: order.userId,
+      expiresAt: order.expiresAt.toISOString(),
+      ticket: {
+        price: ticket.price,
+        id: ticket.id,
+        title: ticket.title
+      }
+  })
   
   res.status(201).send(order);
 });
